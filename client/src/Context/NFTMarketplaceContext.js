@@ -4,7 +4,7 @@ import { ethers } from "ethers";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { create as ipfsHttpClient } from "ipfs-http-client";
-
+import { createNfTRequest } from "../../src/pages/api/DBfunction.js";
 //const cors = require('cors')
 //require("dotenv").config("./../server.env" );
 
@@ -78,6 +78,12 @@ const connectToTransferFunds = async () => {
 
 export const NFTMarketplaceContext = React.createContext();
 
+export const usePosts = () => {
+  const context = useContext(NFTMarketplaceContext);
+  if (!context) throw new Error("No existe ningun provider pOST");
+  return context;
+};
+
 export const NFTMarketplaceProvider = ({ children }) => {
   const titleData = "Discover, collect, and sell NFTs";
 
@@ -86,6 +92,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
   const [openError, setOpenError] = useState(false);
   const [currentAccount, setCurrentAccount] = useState("");
   const [accountBalance, setAccountBalance] = useState("");
+  const [dbFetch, setDbFetch] = useState([]);
   const router = useRouter();
 
   //---CHECK IF WALLET IS CONNECTD
@@ -142,6 +149,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
       const added = await client.add({ content: file });
       const url = `${subdomain}/ipfs/${added.path}`;
       return url;
+      
     } catch (error) {
       setError("Error Uploading to IPFS");
       setOpenError(true);
@@ -156,13 +164,17 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
     try {
       const added = await client.add(data);
-
       const url = `https://infura-ipfs.io/ipfs/${added.path}`;
-      
+      //const res = await createNfTRequest();
+      console.log(data);
+      // //  //setDbFetch([...data,res.data]);
+      console.log(createNfTRequest(data));
+      //setDbFetch(data);
       await createSale(url, price);
+     
       router.push("/searchPage");
     } catch (error) {
-      setError("Error while creating NFT not gut");
+      setError("Error while creating NFT NO ESTA BIEN");
       setOpenError(true);
     }
   };
@@ -176,7 +188,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
       const contract = await connectingWithSmartContract();
 
       const listingPrice = await contract.getListingPrice();
-
+      
       const transaction = !isReselling
         ? await contract.createToken(url, price, {
             value: listingPrice.toString(),
@@ -186,7 +198,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
           });
 
       await transaction.wait();
-      console.log(transaction);
+   
+       console.log(createNfTRequest(data));
     } catch (error) {
       setError("error while creating sale");
       setOpenError(true);
@@ -225,7 +238,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
                 seller,
                 owner,
                 image,
-                name,
+                name: "jdfkldjsfkldajsklfj",
                 description,
                 tokenURI,
               };
@@ -234,6 +247,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
         );
         console.log(items);
         return items;
+        
       }
     } catch (error) {
       setError("Fehler beim Abrufen von NFTS");
@@ -244,6 +258,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
   useEffect(() => {
     if (currentAccount) {
       fetchNFTs();
+       console.log(createNfTRequest(data));
     }
   }, []);
 
@@ -293,6 +308,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
   useEffect(() => {
     fetchMyNFTsOrListedNFTs();
+
   }, []);
 
   //---BUY NFTs FUNCTION

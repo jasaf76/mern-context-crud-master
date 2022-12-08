@@ -5,25 +5,25 @@ const nftSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, "A NFT muss eine Haben"],
+      required: [true, "A NFT muss ein Name Haben"],
       unique: true,
       trim: true,
       maxlength: [40, "NFT Name darf nicht mehr als 40 Zeichen haben"],
       minlength: [6, "Nft Name muss mindestens 6 Zeichen haben"],
       // validate: [validator.isAlpha,"NFT Name KANN NUR Zeichen HABEn, keine Number"],
     },
-    slug: String,
+    //slug: String,
     duration: {
       type: String,
-      required: [true, "Aktuelle Dauer muss eine Haben "],
+     // required: [true, "Aktuelle Dauer muss eine Haben "],
     },
     maxGroupSize: {
       type: Number,
-      required: [true, "Aktuelle Größe muss eine Gruppe Haben"],
+     // required: [true, "Aktuelle Größe muss eine Gruppe Haben"],
     },
     difficulty: {
       type: String,
-      required: [true, "Aktuelle Dauer muss eine Gruppe Haben"],
+     // required: [true, "Aktuelle Dauer muss eine Gruppe Haben"],
       enum: {
         values: ["easy", "medium", "difficulty"],
         message: "Die Schwierigkeit ist entweder: leicht, mittel oder schwer.",
@@ -32,8 +32,8 @@ const nftSchema = new mongoose.Schema(
     ratingsAverage: {
       type: Number,
       default: 0,
-      min: [1, "mindestens 1 EXTERNE vergeben"],
-      max: [5, "maximal 5 EXTERNE vergeben"],
+      // min: [1, "mindestens 1 EXTERNE vergeben"],
+      // max: [5, "maximal 5 EXTERNE vergeben"],
     },
     ratingsQuantity: {
       type: Number,
@@ -41,7 +41,7 @@ const nftSchema = new mongoose.Schema(
     },
     price: {
       type: Number,
-      required: [true, "A NFT muss ein Preis haben"],
+      //required: [true, "A NFT muss ein Preis haben"],
     },
     priceDiscount: {
       type: Number,
@@ -55,7 +55,7 @@ const nftSchema = new mongoose.Schema(
     },
     summary: {
       type: String,
-      required: [true, "A NFT muss provide the summary"],
+     // required: [true, "A NFT muss provide the summary"],
       trim: true,
     },
     description: {
@@ -65,7 +65,7 @@ const nftSchema = new mongoose.Schema(
     imageCover: {
       type: String,
       trim: true,
-      required: [true, "A NFT muss provide the image cover"],
+   //   required: [true, "A NFT muss provide the image cover"],
     },
     images: [String],
     createdAt: {
@@ -81,7 +81,7 @@ const nftSchema = new mongoose.Schema(
   },
   {
     toJSON: { virtuals: true },
-    toObject: { virutals: true },
+    toObject: { virtuals: true },
   }
 );
 
@@ -91,11 +91,11 @@ nftSchema.virtual("durationWeeks").get(function () {
 //mongoose middleware
 
 //Document middleware: runs before .save() or create()
-nftSchema.pre("save", function (next) {
-  // console.log(this);
-  this.slug = slugify(this.name, { lower: true });
-  next();
-});
+// nftSchema.pre("save", function (next) {
+//   // console.log(this);
+//   this.slug = slugify(this.name, { lower: true });
+//   next();
+// });
 
 //QUERY middleware
 ///---PRE

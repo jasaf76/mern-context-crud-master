@@ -2,7 +2,7 @@ import express from "express";
 import morgan from "morgan";
 import AppError from "./server/utils/appError.js";
 import globalErrorHandler from "./server/controllers/errorController.js";
-import nftsRouter from "./server/routes/nftsRoute.js";
+import nftsRouter from "./server/routes/nftsRoute.routes.js";
 
 import usersRouter from "./server/routes/usersRoute.js";
 

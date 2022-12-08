@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext, createContext } from "react";
 import { MdOutlineHttp, MdOutlineAttachFile } from "react-icons/md";
 import { FaPercent } from "react-icons/fa";
 import { AiTwotonePropertySafety } from "react-icons/ai";
@@ -12,8 +12,14 @@ import formStyle from "../AccountPage/Form/Form.module.css";
 import images from "../img";
 import { Button } from "../components/componentsindex.js";
 import { DropZone } from "./uploadNFTIndex.js";
+import { usePosts } from "../Context/NFTMarketplaceContext.js";
+import {
+  getAllNfts,
+  updateNFT,
+} from "../../../server/controllers/nftControllers.js";
+import { sendData, createNfTRequest } from "./../pages/api/DBfunction.js";
 
-const UloadNFT = ({ uploadToIPFS, createNFT }) => {
+const UploadNFT = ({ uploadToIPFS, createNFT,  }) => {
   const [price, setPrice] = useState("");
   const [active, setActive] = useState(0);
   const [name, setName] = useState("");
@@ -24,10 +30,9 @@ const UloadNFT = ({ uploadToIPFS, createNFT }) => {
   const [category, setCategory] = useState(0);
   const [properties, setProperties] = useState("");
   const [image, setImage] = useState(null);
-
   const router = useRouter();
 
-  const categoryArry = [
+  const categoryArray = [
     {
       image: images.nft_image_1,
       category: "Sports",
@@ -74,9 +79,11 @@ const UloadNFT = ({ uploadToIPFS, createNFT }) => {
       <div className={Style.upload_box}>
         <div className={formStyle.Form_box_input}>
           <label htmlFor="nft">Item Name</label>
+
           <input
+            name="name"
             type="text"
-            placeholder="shoaib bhai"
+            placeholder="José Antonio"
             className={formStyle.Form_box_input_userName}
             onChange={(e) => setName(e.target.value)}
           />
@@ -105,14 +112,14 @@ const UloadNFT = ({ uploadToIPFS, createNFT }) => {
 
         <div className={formStyle.Form_box_input}>
           <label htmlFor="description">Description</label>
+
           <textarea
             name=""
             id=""
             cols="30"
             rows="6"
             placeholder="something about yourself in few words"
-            onChange={(e) => setDescription(e.target.value)}
-          ></textarea>
+            onChange={(e) => setDescription(e.target.value)}></textarea>
           <p>
             The description will be included on the item's detail page
             underneath its image. Markdown syntax is supported.
@@ -126,14 +133,13 @@ const UloadNFT = ({ uploadToIPFS, createNFT }) => {
           </p>
 
           <div className={Style.upload_box_slider_div}>
-            {categoryArry.map((el, i) => (
+            {categoryArray.map((el, i) => (
               <div
                 className={`${Style.upload_box_slider} ${
                   active == i + 1 ? Style.active : ""
                 }`}
                 key={i + 1}
-                onClick={() => (setActive(i + 1), setCategory(el.category))}
-              >
+                onClick={() => (setActive(i + 1), setCategory(el.category))}>
                 <div className={Style.upload_box_slider_box}>
                   <div className={Style.upload_box_slider_box_img}>
                     <Image
@@ -240,4 +246,4 @@ const UloadNFT = ({ uploadToIPFS, createNFT }) => {
   );
 };
 
-export default UloadNFT;
+export default UploadNFT;
